@@ -1,0 +1,70 @@
+title: ACTM Final Project
+description: Build, threat-model and red-team an LLM application. Final project of the HSLU course AI Based Cybersecurity Threat Detection and Mitigation (Fall 2026).
+remote_theme: just-the-docs/just-the-docs
+
+url: https://actm-fall-2026.github.io
+
+# ---------------------------------------------------------------------------
+# Course-specific values, used across pages as {{ site.<name> }}.
+# Fill in the TBC ones before kickoff; every page picks them up from here.
+# ---------------------------------------------------------------------------
+domain: "DOMAIN-TBC"                       # team N is served at https://teamN.<domain>
+inference_base_url: "https://api.swissai.svc.cscs.ch/v1"
+data_url: "#data-link-tbc"                 # where the encrypted track zips are shared
+handin_url: "#handin-link-tbc"             # application hand-in (repo URL + v1 commit)
+redteam_upload_url: "#redteam-upload-tbc"  # red-team report upload (e.g. Ilias)
+report_deadline: "TBC"                     # final report due date
+
+# Callout boxes. Usage in a page:
+#   {: .warning }
+#   > This action is grounds for disqualification.
+callouts:
+  summary:
+    title: Summary
+    color: blue
+  tip:
+    title: Tip
+    color: green
+  note:
+    title: Note
+    color: yellow
+  important:
+    title: Important
+    color: purple
+  warning:
+    title: Warning
+    color: red
+
+permalink: pretty
+
+search_enabled: true
+search:
+  heading_level: 2
+  previews: 3
+  preview_words_before: 5
+  preview_words_after: 10
+  tokenizer_separator: /[\s\-/]+/
+  rel_url: true
+  button: false
+
+heading_anchors: true
+
+aux_links:
+  "GitHub":
+    - "https://github.com/Reliable-Information-Lab-HEVS"
+
+color_scheme: light
+
+footer_content: "HSLU &middot; AI Based Cybersecurity Threat Detection and Mitigation (ACTM) &middot; Fall 2026"
+
+plugins:
+  - jekyll-remote-theme
+  - jekyll-seo-tag
+  - jekyll-include-cache
+
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - vendor
+  - node_modules
+  - README.md

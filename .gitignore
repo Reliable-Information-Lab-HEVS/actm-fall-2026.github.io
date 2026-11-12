@@ -1,0 +1,22 @@
+# Jekyll build output
+_site/
+.jekyll-cache/
+.jekyll-metadata
+.sass-cache/
+
+# Local Ruby state
+vendor/
+.bundle/
+
+# Secrets (API keys, zip passwords) — never commit
+.env
+**/.env
+inference.env
+
+# Track data, held-out batteries and red-team packs — never commit
+*.zip
+corpus/
+
+# OS
+Thumbs.db
+.DS_Store
