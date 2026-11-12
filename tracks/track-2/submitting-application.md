@@ -29,7 +29,7 @@ docker compose up -d --build
   |---|---|
   | `OPENAI_BASE_URL` | `{{ site.inference_base_url }}` |
   | `OPENAI_API_KEY` | your team's key, handed out at the kickoff |
-  | `MODEL` | one of the ids in [Available models](/infrastructure/#available-models) |
+  | `MODEL` | one of the ids in [Available models]({% link infrastructure.md %}#available-models) |
 
 ## Before you submit
 

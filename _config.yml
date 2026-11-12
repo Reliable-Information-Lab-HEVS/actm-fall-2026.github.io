@@ -2,7 +2,10 @@ title: ACTM Final Project
 description: Build, threat-model and red-team an LLM application. Final project of the HSLU course AI Based Cybersecurity Threat Detection and Mitigation (Fall 2026).
 remote_theme: just-the-docs/just-the-docs
 
-url: https://actm-fall-2026.github.io
+# Served as a project site under the organisation's Pages domain, so every
+# asset and link needs the repository name as prefix.
+url: https://reliable-information-lab-hevs.github.io
+baseurl: /actm-fall-2026.github.io
 
 # ---------------------------------------------------------------------------
 # Course-specific values, used across pages as {{ site.<name> }}.

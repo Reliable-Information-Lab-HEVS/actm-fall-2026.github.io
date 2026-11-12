@@ -89,7 +89,7 @@ You deploy the application yourself on your team VM with **Docker Compose**. The
   |---|---|
   | `OPENAI_BASE_URL` | `{{ site.inference_base_url }}` |
   | `OPENAI_API_KEY` | your team's key, handed out at the kickoff |
-  | `MODEL` | one of the ids in [Available models](/infrastructure/#available-models) |
+  | `MODEL` | one of the ids in [Available models]({% link infrastructure.md %}#available-models) |
 
   Because the endpoint is OpenAI-compatible, the `openai` SDK reads `OPENAI_BASE_URL` and `OPENAI_API_KEY` automatically. An `inference.env.example` is in the template.
 
