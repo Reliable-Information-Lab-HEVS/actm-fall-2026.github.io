@@ -39,7 +39,7 @@ The response carries a classification, a verdict (`NO_LICENCE_REQUIRED`, `LICENC
 - **Item specifications.** `specifications` is free-form; ambiguous or borderline parameters are a good way to unsettle the classification.
 - **Framing on `query`.** Compliance-officer roleplay, hypotheticals, "just confirming what SECO told us", translation between de/fr/it/en.
 
-You attack a **black box**: you know this specification and the model menu, but not the target's code, prompts, or guardrails. See [General Information]({% link general-information.md %}) for the rules of engagement.
+You attack a **black box**: you know this specification and the recommended models, but not the target's code, prompts, or guardrails. See [General Information]({% link general-information.md %}) for the rules of engagement.
 
 ---
 

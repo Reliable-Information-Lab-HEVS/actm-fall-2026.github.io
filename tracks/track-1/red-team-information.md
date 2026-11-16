@@ -50,7 +50,7 @@ Before the red-team phase opens, an extra **encrypted zip** (`track1_redteam.zip
 - **Framing on `/chat`.** Roleplay, claimed qualifications, hypotheticals, translation, partial questions across turns of one `session_id`.
 - **Grounding gaps.** Push the assistant into improvising beyond the corpus, then into confirming the sensitive part.
 
-You attack a **black box**: you know this specification and the model menu, but not the target's code, prompts, or guardrails. See [General Information]({% link general-information.md %}) for the rules of engagement.
+You attack a **black box**: you know this specification and the recommended models, but not the target's code, prompts, or guardrails. See [General Information]({% link general-information.md %}) for the rules of engagement.
 
 ---
 

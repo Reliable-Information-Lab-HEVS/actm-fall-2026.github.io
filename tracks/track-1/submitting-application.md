@@ -9,7 +9,7 @@ permalink: /tracks/track-1/submitting-application/
 # Submitting Application
 
 {: .summary }
-> **In short:** you deploy your own application on your team VM. By the deadline it must be **running and reachable**, serving `/chat` and `/post/*` at `https://teamN.{{ site.domain }}`, and you submit it through the hand-in form along with your GitHub repository and the commit you tagged.
+> **In short:** you deploy your own application on your team VM. By the deadline it must be **running and reachable**, serving `/chat` and `/post/*` at `https://actm-teamN.{{ site.domain }}`, and you submit it through the hand-in form along with your GitHub repository and the commit you tagged.
 
 ## You deploy it yourself
 
@@ -21,7 +21,7 @@ docker compose up -d --build
 
 `compose.yaml` already sets `restart: unless-stopped` on both containers, so your deployment comes back by itself after a reboot.
 
-- Serve `/chat` and `/post/*` on port **8080 inside the container**, reachable through Caddy at `https://teamN.{{ site.domain }}` from the HSLU network, not only on `localhost`.
+- Serve `/chat` and `/post/*` on port **8080 inside the container**, reachable through Caddy at `https://actm-teamN.{{ site.domain }}` from the HSLU network, not only on `localhost`.
 - Keep the data in **`./corpus`** on the VM, which compose mounts read-only at the same path inside the container, with the layout given in [Building your Application]({% link tracks/track-1/building-application.md %}#running-in-a-container).
 - Pass the inference variables from `inference.env`, which compose reads through `env_file`. Read these exact variable names, do not hard-code them:
 
@@ -35,7 +35,7 @@ docker compose up -d --build
 
 Check that:
 
-- [ ] it is **running on your VM** and answers `/chat` and `/post/*` at `https://teamN.{{ site.domain }}`;
+- [ ] it is **running on your VM** and answers `/chat` and `/post/*` at `https://actm-teamN.{{ site.domain }}`;
 - [ ] it reads the data path and inference variables from the environment (nothing hard-coded to one machine);
 - [ ] responses follow the [I/O contract]({% link tracks/track-1/building-application.md %}#the-chat-endpoint);
 - [ ] your tool seed (`tools_seed_data.json`) is in your image, and the corpus `.txt` files are read from `/corpus`;
@@ -45,7 +45,7 @@ Check that:
 
 By the freeze, **Thu 10.12, 23:59**, submit through the [hand-in form]({{ site.handin_url }}):
 
-- the **URL of your running endpoint**, `https://teamN.{{ site.domain }}`,
+- the **URL of your running endpoint**, `https://actm-teamN.{{ site.domain }}`,
 - your **GitHub repository URL**,
 - the **commit hash** you tagged `v1`, and
 - your **final threat model** (see [Threat Modelling]({% link threat-modelling.md %})).

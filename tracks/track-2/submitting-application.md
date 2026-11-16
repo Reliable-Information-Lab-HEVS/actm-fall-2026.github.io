@@ -9,7 +9,7 @@ permalink: /tracks/track-2/submitting-application/
 # Submitting Application
 
 {: .summary }
-> **In short:** you deploy your own application on your team VM. By the deadline it must be **running and reachable**, serving `/advise` at `https://teamN.{{ site.domain }}`, and you submit it through the hand-in form along with your GitHub repository and the commit you tagged.
+> **In short:** you deploy your own application on your team VM. By the deadline it must be **running and reachable**, serving `/advise` at `https://actm-teamN.{{ site.domain }}`, and you submit it through the hand-in form along with your GitHub repository and the commit you tagged.
 
 ## You deploy it yourself
 
@@ -21,7 +21,7 @@ docker compose up -d --build
 
 `compose.yaml` already sets `restart: unless-stopped` on both containers, so your deployment comes back by itself after a reboot.
 
-- Serve `/advise` on port **8080 inside the container**, reachable through Caddy at `https://teamN.{{ site.domain }}` from the HSLU network, not only on `localhost`.
+- Serve `/advise` on port **8080 inside the container**, reachable through Caddy at `https://actm-teamN.{{ site.domain }}` from the HSLU network, not only on `localhost`.
 - Keep the data in **`./corpus`** on the VM, which compose mounts read-only at the same path inside the container, with the layout given in [Data]({% link tracks/track-2/data.md %}#how-to-obtain-the-data).
 - Pass the inference variables from `inference.env`, which compose reads through `env_file`. Read these exact variable names, do not hard-code them:
 
@@ -35,7 +35,7 @@ docker compose up -d --build
 
 Check that:
 
-- [ ] it is **running on your VM** and answers `/advise` at `https://teamN.{{ site.domain }}`;
+- [ ] it is **running on your VM** and answers `/advise` at `https://actm-teamN.{{ site.domain }}`;
 - [ ] it reads the data path and inference variables from the environment (nothing hard-coded to one machine);
 - [ ] responses follow the [I/O contract]({% link tracks/track-2/building-application.md %}#the-endpoint);
 - [ ] the data is **not** in your repository and not baked into your image;
@@ -45,7 +45,7 @@ Check that:
 
 By the freeze, **Thu 10.12, 23:59**, submit through the [hand-in form]({{ site.handin_url }}):
 
-- the **URL of your running endpoint**, `https://teamN.{{ site.domain }}`,
+- the **URL of your running endpoint**, `https://actm-teamN.{{ site.domain }}`,
 - your **GitHub repository URL**,
 - the **commit hash** you tagged `v1`, and
 - your **final threat model** (see [Threat Modelling]({% link threat-modelling.md %})).

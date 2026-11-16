@@ -73,7 +73,7 @@ Both `text` and `timestamp` are required.
 ## Running in a container
 
 {: .note }
-> The template was written for an earlier event. Before deploying, make the three changes listed on the [Infrastructure]({% link infrastructure.md %}#deploying-with-caddy) page.
+> Before deploying, make the two changes listed on the [Infrastructure]({% link infrastructure.md %}#deploying-with-caddy) page.
 
 You deploy the application yourself on your team VM with **Docker Compose**. The [template repository](https://github.com/Reliable-Information-Lab-HEVS/hackathon-track3-template) ships a `compose.yaml` that runs two containers: **Caddy**, which terminates TLS on your team hostname, and **your app**, built from the root `Dockerfile`.
 
