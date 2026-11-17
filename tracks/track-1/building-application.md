@@ -8,7 +8,7 @@ permalink: /tracks/track-1/building-your-application/
 
 # Building your Application
 
-This page is the technical contract: the endpoints your application exposes, how you build the two tools, how you deploy it, and what you are scored on. For the corpus and the tool data themselves, see [Data]({% link tracks/track-1/data.md %}).
+This page is the technical contract: the endpoints your application exposes, how you build the two tools, and how you deploy it. For the corpus and the tool data themselves, see [Data]({% link tracks/track-1/data.md %}).
 
 {: .summary }
 > **In short:** build one Docker container that serves `POST /chat` (the assistant) and `POST /post/*` (the tool store) on port 8080. The assistant answers from the corpus, exposes two tools as an MCP server, and enforces the safety rules. Start from the [template repository](https://github.com/Reliable-Information-Lab-HEVS/hackathon-track1-template).
@@ -37,6 +37,7 @@ Everything runs on port **8080** inside your container.
 |---|---|
 | `message` | the user's question or instruction |
 | `session_id` | a stable identifier for the conversation |
+| `model` (optional) | the chat model that answers this request. If it is not available, return `400` with `{ "error": "model not available" }` |
 
 **Response:** a JSON object containing:
 
@@ -75,23 +76,7 @@ POST /post/bulletin
 ---
 
 ## Running in a container
-
-{: .note }
-> Before deploying, make the two changes listed on the [Infrastructure]({% link infrastructure.md %}#deploying-with-caddy) page.
-
-You deploy the application yourself on your team VM with **Docker Compose**. The [template repository](https://github.com/Reliable-Information-Lab-HEVS/hackathon-track1-template) ships a `compose.yaml` that runs two containers: **Caddy**, which terminates TLS on your team hostname, and **your app**, built from the root `Dockerfile`.
-
-- Your application must listen on **`0.0.0.0:8080` inside the container**. It is deliberately not published to the host: only Caddy is reachable from outside, and it proxies to `app:8080` on the compose network, so binding `127.0.0.1` makes you unreachable.
-- **The data lives in `./corpus` on your VM and is mounted read-only at the same path, `/corpus`, inside the container.** Unzip it into `./corpus`, next to `compose.yaml`, and read it from `/corpus` in your code. To keep it elsewhere on the VM, start with `CORPUS_DIR=/path/on/your/vm docker compose up -d`: that changes which host directory is mounted, and the path inside the container stays `/corpus`. Put the corpus `.txt` files directly in `./corpus`, not in a nested subfolder, so that they appear as `/corpus/TM-9-1005-224-23-and-P.txt` and not `/corpus/track1_data/TM-...`. Keep reading from `/corpus` rather than baking the corpus into your image, so the path stays the same if the data is reissued.
-- The **inference endpoint** is OpenAI-compatible and is, passed by compose through `env_file: inference.env`. Read these exact variable names, do not hard-code them:
-
-  | Variable | Value |
-  |---|---|
-  | `OPENAI_BASE_URL` | `{{ site.inference_base_url }}` |
-  | `OPENAI_API_KEY` | your team's key, handed out at the kickoff |
-  | `MODEL` | one of the ids in [Available models]({% link infrastructure.md %}#available-models) |
-
-  Because the endpoint is OpenAI-compatible, the `openai` SDK reads `OPENAI_BASE_URL` and `OPENAI_API_KEY` automatically. An `inference.env.example` is in the template.
+You deploy the application yourself on your team VM with Docker Compose. The [template repository](https://github.com/Reliable-Information-Lab-HEVS/hackathon-track1-template) ships a `compose.yaml` that runs two containers: **Caddy**, which terminates TLS on your team hostname, and **your app**, built from the root `Dockerfile`. It is a very minimal template, and you are fully free to adapt it in any way you like. 
 
 ---
 
@@ -102,6 +87,7 @@ At minimum, your application must:
 - [ ] perform **document retrieval** over the corpus;
 - [ ] expose the two tools as an **MCP server** and call them when needed;
 - [ ] serve the **`POST /post/*`** endpoints that add records to the store;
+- [ ] honour the optional **`model`** field on `/chat`, for any chat model the endpoint serves;
 
 ---
 
