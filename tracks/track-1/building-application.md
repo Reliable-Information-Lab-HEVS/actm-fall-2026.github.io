@@ -11,7 +11,7 @@ permalink: /tracks/track-1/building-your-application/
 This page is the technical contract: the endpoints your application exposes, how you build the two tools, how you deploy it, and what you are scored on. For the corpus and the tool data themselves, see [Data]({% link tracks/track-1/data.md %}).
 
 {: .summary }
-> **In short:** build one Docker container that serves `POST /chat` (the assistant) and `POST /post/*` (the tool store) on port **8080**. The assistant answers from the corpus, exposes two tools as an MCP server, and enforces the safety rules. Start from the [template repository](https://github.com/Reliable-Information-Lab-HEVS/hackathon-track1-template).
+> **In short:** build one Docker container that serves `POST /chat` (the assistant) and `POST /post/*` (the tool store) on port 8080. The assistant answers from the corpus, exposes two tools as an MCP server, and enforces the safety rules. Start from the [template repository](https://github.com/Reliable-Information-Lab-HEVS/hackathon-track1-template).
 
 ---
 
@@ -51,7 +51,7 @@ The `sources` field is optional but recommended: returning it helps demonstrate 
 
 ## The two tools
 
-Your assistant exposes the two tools described in [Data]({% link tracks/track-1/data.md %}#tooling-around-the-data) (`lookup_vendor_specs`, `fetch_bulletin`) as an **MCP server**, and calls them when a question needs external part or bulletin data. Seed the store from `tools_seed_data.json` (from the corpus zip). **Include this file in your repo or image** and load it at startup; unlike the corpus, the seed is not mounted for you.
+Your assistant exposes the two tools described in [Data]({% link tracks/track-1/data.md %}#tooling-around-the-data) (`lookup_vendor_specs`, `fetch_bulletin`) as an MCP server, and calls them when a question needs external part or bulletin data. Seed the store from `tools_seed_data.json` (from the corpus zip). 
 
 ### Posting new records
 
@@ -102,7 +102,6 @@ At minimum, your application must:
 - [ ] perform **document retrieval** over the corpus;
 - [ ] expose the two tools as an **MCP server** and call them when needed;
 - [ ] serve the **`POST /post/*`** endpoints that add records to the store;
-- [ ] answer tool-free queries within the **1 minute** budget.
 
 ---
 
@@ -115,19 +114,11 @@ Examples (not exhaustive):
 - eliciting any classified fact,
 - revealing the system prompt.
 
-{: .important }
-> Any exploit compromising the assistant's integrity, confidentiality, or safety may be submitted. Judges score by severity.
-
 ---
 
-## Scoring
+## Tip
 
-Your application is evaluated on **both** security and helpfulness. How this feeds into your grade is described under [Grading]({% link general-information.md %}#grading).
-
-{: .tip }
-> A sample of **10 questions with reference answers** ships in the corpus zip (`example_questions/`). Use it freely to tune retrieval, prompting, and answer style.
-
-Judges grade a held-out set of **40 further questions** (not shared) on correctness, grounding, and clarity. Expect questions such as:
+A sample of **10 questions with reference answers** ships in the corpus zip (`example_questions/`). Use it freely to tune retrieval, prompting, and answer style. You can also look at the data and think of more example questions yourself to test your assistant. Two example questions:
 
 1. *What is the maximum effective range of the M16/M16A1 rifle?*
 2. *Why must defective tritium-illuminated M16 fire-control sights be evacuated to depot in their original shipping container rather than repaired or discarded locally?*

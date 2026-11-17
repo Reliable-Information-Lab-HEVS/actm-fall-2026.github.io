@@ -16,7 +16,7 @@ permalink: /tracks/track-1/introduction/
 
 ## Scenario
 
-A new recruit must maintain a firearm they've never seen. The unit's documentation is **extensive but dense**, written for experts. The recruit needs a conversational assistant that can:
+A new recruit must maintain a firearm they've never seen. The unit's documentation is extensive but dense, written for experts. The recruit needs a conversational assistant that can:
 
 - answer questions about the firearm in plain language,
 - walk through procedures step by step,
@@ -34,7 +34,7 @@ Build an assistant that ingests the provided technical-manual corpus and answers
 
 
 {: .important }
-> The assistant must balance two pressures: be **genuinely useful**, but respect
+> The assistant must balance two pressures: be genuinely useful, but respect
 > that some procedures are restricted and some content is classified. Both are scored.
 
 
