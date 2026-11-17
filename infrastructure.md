@@ -8,7 +8,7 @@ permalink: /infrastructure/
 # Infrastructure
 
 {: .summary }
-> **In short:** each team gets an Ubuntu VM with Docker on the HSLU network. You deploy your application on it yourself, behind Caddy on port 443, at `https://teamN.{{ site.domain }}`. All teams use the same OpenAI-compatible inference endpoint, with one API key per team.
+> **In short:** each team gets an Ubuntu VM with Docker on the HSLU network. You deploy your application on it yourself, behind Caddy on port 443, at `https://actm-teamN.{{ site.domain }}`. All teams use the same OpenAI-compatible inference endpoint, with one API key per team.
 
 ---
 
@@ -19,8 +19,8 @@ permalink: /infrastructure/
 | **OS** | Ubuntu 26.04 LTS |
 | **Resources** | 4 vCPUs, 7.3 GB RAM, 18 GB disk (about 11 GB free) |
 | **Software** | Docker and Docker Compose |
-| **Hostname** | `teamN.{{ site.domain }}`, with `N` your team number |
-| **Login** | `ssh labadmin@teamN.{{ site.domain }}`, with SSH keys only |
+| **Hostname** | `actm-teamN.{{ site.domain }}`, with `N` your team number |
+| **Login** | `ssh labadmin@actm-teamN.{{ site.domain }}`, with SSH keys only |
 
 {: .important }
 > The VMs are reachable **only from the HSLU network**: HSLU Wi-Fi on campus, or the HSLU VPN from elsewhere. If a hostname does not resolve, check that you are connected to one of the two.
@@ -38,7 +38,7 @@ To make logging in easier, add this to `~/.ssh/config` on your laptop:
 
 ```
 Host actm
-    HostName teamN.{{ site.domain }}
+    HostName actm-teamN.{{ site.domain }}
     User labadmin
     IdentityFile ~/.ssh/id_ed25519
 ```
@@ -64,20 +64,19 @@ All other inbound ports, including 80, are closed. Outbound HTTPS works (PyPI, D
 
 ## Deploying with Caddy
 
-Your VM already has a TLS certificate for `*.{{ site.domain }}` under `/etc/tls/actm/`. The track templates ship a `compose.yaml` with two containers: **Caddy**, which terminates TLS on port 443, and **your app**, which Caddy reaches as `app:8080` on the internal Docker network.
+Your VM already has a TLS certificate for its own hostname, `actm-teamN.{{ site.domain }}`, under `/etc/tls/actm/` (`fullchain.pem` and `privkey.pem`). The track templates ship a `compose.yaml` with two containers: **Caddy**, which terminates TLS on port 443 using that certificate, and **your app**, which Caddy reaches as `app:8080` on the internal Docker network.
 
-The templates were written for an earlier event, so before the first start make three changes:
+Before the first start, make two changes:
 
-1. In the `Caddyfile`, replace the hostname with yours, `teamN.{{ site.domain }}`.
-2. In `compose.yaml`, replace the certificate directory `/etc/tls/llmhack/` with `/etc/tls/actm/` (two lines).
-3. Copy `inference.env.example` to `inference.env` and fill in your API key, the endpoint `{{ site.inference_base_url }}`, and your model.
+1. In the `Caddyfile`, replace `N` in `actm-teamN.{{ site.domain }}` with your team number.
+2. Copy `inference.env.example` to `inference.env` and fill in your API key and your model. The endpoint `{{ site.inference_base_url }}` is already set.
 
 Then:
 
 ```bash
 docker compose up -d --build
 docker compose ps            # both containers up, app healthy
-curl https://teamN.{{ site.domain }}/health
+curl https://actm-teamN.{{ site.domain }}/health
 ```
 
 {: .warning }
@@ -87,16 +86,20 @@ curl https://teamN.{{ site.domain }}/health
 
 ## Inference endpoint
 
-All teams use the same OpenAI-compatible endpoint and the same model menu, so the contest turns on your scaffolding rather than on who picked the bigger model.
+All teams use the same OpenAI-compatible endpoint, the [Swiss AI Serving](https://serving.swissai.svc.cscs.ch/) platform at CSCS, with the same recommended models, so the contest turns on your scaffolding rather than on who picked the bigger model.
 
 | | |
 |---|---|
 | **Endpoint** | `{{ site.inference_base_url }}` |
 | **API key** | one per team, handed out at the kickoff |
+| **Rate limit** | about 15 requests per minute per key for the models below |
+
+{: .warning }
+> The rate limit applies to every call your application makes, including embeddings, reranking and any extra LLM calls in your guardrails. Design your pipeline so that one user question does not burn through the whole minute's budget.
 
 Read `OPENAI_BASE_URL`, `OPENAI_API_KEY` and `MODEL` from the environment. Do not hard-code them, and never commit the key: `inference.env` is in the template's `.gitignore`. Because the endpoint is OpenAI-compatible, the `openai` Python SDK picks up the first two by itself.
 
-### Available models
+### Recommended models
 
 Use the **exact** ids below, including the prefix before the first `/`. Without it the endpoint returns an error.
 
@@ -105,14 +108,9 @@ Use the **exact** ids below, including the prefix before the first `/`. Without 
 | Model id | Notes |
 |---|---|
 | `CSCS-Inference/google/gemma-4-31B-it` | fast, good default |
-| `CSCS-Inference/Qwen/Qwen3.8-Flash-Next-FP8` | reasoning model, slower |
-| `RCP-AIaaS/mistralai/Mistral-Small-3.2-24B-Instruct-2506` | smallest of the three |
-| `CSCS-Inference/swiss-ai/Apertus-v1.5-70B` | the Swiss open LLM |
+| `RCP-AIaaS/swiss-ai/Apertus-large` | the Swiss open LLM |
 
-All of them support tool calling (`tools` in the request). For grounded, extractive answers you will usually want a `temperature` well below the default.
-
-{: .note }
-> `Qwen3.8-Flash-Next` is a reasoning model: its responses can carry a `reasoning_content` field next to `content`. Read the answer from `content`, and do not show the reasoning to a user or feed it back as context without thinking about what is in it.
+For grounded, extractive answers you will usually want a `temperature` well below the default. If your design relies on tool calling (`tools` in the request), check early that the model you pick handles it reliably.
 
 **Embedding model**, called on `/embeddings`:
 
@@ -120,15 +118,19 @@ All of them support tool calling (`tools` in the request). For grounded, extract
 |---|---|
 | `RCP-AIaaS/Qwen/Qwen3-Embedding-8B` | 4096 |
 
+**Reranker** (optional): `RCP-AIaaS/Qwen/Qwen3-Reranker-8B`. See the reranking section of [RAG]({% link rag.md %}) for when a reranker helps.
+
 You can also run a small embedding or reranking model locally on your VM, for example with `sentence-transformers`; with 4 CPUs and no GPU, keep it small.
 
-You can list everything the endpoint serves:
+### Other models
+
+You may try any other model the endpoint serves. List them with:
 
 ```bash
 curl -H "Authorization: Bearer $OPENAI_API_KEY" {{ site.inference_base_url }}/models
 ```
 
-The endpoint lists more models than the ones above. Stick to the menu: your attackers assume it, and so does the grading.
+or browse them on [serving.swissai.svc.cscs.ch](https://serving.swissai.svc.cscs.ch/). If you deploy something other than the recommended models, say which model and why in your threat model. Some models are reasoning models whose responses carry a `reasoning_content` field next to `content`: read the answer from `content`, and do not show the reasoning to a user or feed it back as context without thinking about what is in it.
 
 ### A first request
 

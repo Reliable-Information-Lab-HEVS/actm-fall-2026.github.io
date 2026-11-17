@@ -48,7 +48,7 @@ For more background reading, have a look at [this article](https://www.trychroma
 
 ## 3. Embedding and indexing
 
-For embedding, the inference endpoint hosts one model, called on `/embeddings` with this exact id:
+For embedding, we recommend this model on the inference endpoint, called on `/embeddings` with this exact id:
 
 | Model id | Dimensions | Notes |
 |---|---|---|
@@ -64,7 +64,9 @@ When you have a list of candidate documents, you can use a reranker to re-evalua
 
 We can do so by retrieving generously (say 20-50 candidates), then rerank and keep the best handful. A cross-encoder reads the query and the candidate *together*, which is more accurate than comparing two independently computed vectors.
 
-You can use an LLM-as-reranker (ask the model to score each candidate's relevance) with one of the chat models on the endpoint, but be aware of the cost in latency against your response budget. A dedicated cross-encoder such as [`bge-reranker-v2-m3`](https://huggingface.co/BAAI/bge-reranker-v2-m3) runs locally on your VM and is cheaper per candidate.
+The inference endpoint hosts a dedicated reranker, `RCP-AIaaS/Qwen/Qwen3-Reranker-8B`. Every reranking call counts against your team's rate limit, so rerank one batch of candidates per question rather than one call per candidate.
+
+You can also use an LLM-as-reranker (ask the model to score each candidate's relevance) with one of the chat models on the endpoint, but be aware of the cost in latency against your response budget. A dedicated cross-encoder such as [`bge-reranker-v2-m3`](https://huggingface.co/BAAI/bge-reranker-v2-m3) runs locally on your VM and is cheaper per candidate.
 
 ---
 

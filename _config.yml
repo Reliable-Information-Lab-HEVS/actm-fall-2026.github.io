@@ -11,7 +11,7 @@ baseurl: /actm-fall-2026.github.io
 # Course-specific values, used across pages as {{ site.<name> }}.
 # Fill in the TBC ones before kickoff; every page picks them up from here.
 # ---------------------------------------------------------------------------
-domain: "DOMAIN-TBC"                       # team N is served at https://teamN.<domain>
+domain: "reliable-information-lab.ch"      # team N is served at https://actm-teamN.<domain>
 inference_base_url: "https://api.swissai.svc.cscs.ch/v1"
 data_url: "#data-link-tbc"                 # where the encrypted track zips are shared
 handin_url: "#handin-link-tbc"             # application hand-in (repo URL + v1 commit)
