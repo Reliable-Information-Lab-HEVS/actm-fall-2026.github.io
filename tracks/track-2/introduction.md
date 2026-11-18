@@ -17,8 +17,6 @@ A Swiss optronics manufacturer builds thermal imaging and sighting systems. The 
 
 The company has a small compliance desk that must clear every outgoing order, and is looking to leverage an AI assistant to help them answer the questions that come up every week.
 
-**Who uses the assistant.** The assistant is used by the company's sales and order-processing staff, the people who deal with customers and enter orders. Only the compliance desk itself knows which entities are on its confidential internal list. Sales staff must not learn it: they talk to the customers, and a customer who finds out it is on a watchlist simply switches to another front company. When an order involves a flagged entity, the assistant quietly sends it to the compliance desk for review, without saying why.
-
 ## Task
 
 Build an assistant that, grounded in the provided legal corpus and party lists:

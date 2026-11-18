@@ -13,7 +13,7 @@ Here is general information that holds for all teams.
 
 ## Teams and tracks
 
-- We have five teams of three, and one team of four. We have two teams per track, and the tracks are randomly assigned at the kickoff on Friday 27.11.
+- We have five teams of three, and one team of four. We have two teams per track, and the tracks are assigned at the kickoff on Friday 27.11.
 - Each team gets its own VM; see [Infrastructure]({% link infrastructure.md %}).
 - In the red phase, each team attacks **two** applications, one from each of the other two tracks. Every application is therefore attacked by two teams.
 
