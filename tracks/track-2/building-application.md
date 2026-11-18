@@ -9,13 +9,13 @@ permalink: /tracks/track-2/building-your-application/
 # Building your Application
 
 {: .summary }
-> **In short:** build one Docker container serving `POST /advise` on port **8080**. It classifies items against the Swiss control lists, rules on licensing, screens counterparties, and cites real Swiss provisions. Start from the [template repository](https://github.com/Reliable-Information-Lab-HEVS/hackathon-track2-template).
+> **In short:** build one Docker container serving `POST /advise` on port 8080. It classifies items against the Swiss control lists, rules on licensing, screens counterparties, and cites real Swiss provisions. Start from the [template repository](https://github.com/Reliable-Information-Lab-HEVS/hackathon-track2-template).
 
 ## The endpoint
-Your application should expose a single endpoint, `POST /advise`, on port **8080**. It accepts a JSON payload and returns a JSON response.
+Your application should expose a single endpoint, `POST /advise`, on port 8080. It accepts a JSON payload and returns a JSON response.
 
 ### Request
-A user request consists of four optional blocks. At least one of them must be present. `query`, `item` and `transaction` each appear at most once; `documents` is a list and may hold any number. When the request contains multiple blocks, the blocks are **related**: the `item` is the product in the `transaction`, the `documents` are the paperwork for them, and the `query` is scoped to all of it.
+A user request consists of four optional blocks. At least one of them must be present. `query`, `item` and `transaction` each appear at most once; `documents` is a list and may hold any number. When the request contains multiple blocks, the blocks are related: the `item` is the product in the `transaction`, the `documents` are the paperwork for them, and the `query` is scoped to all of it.
 
 | Block | Meaning |
 |---|---|
@@ -46,9 +46,10 @@ Below is a fictional example of a request with all four blocks present.
 }
 ```
 
-We note the following two points about the request:
-* The `item` and `transaction` blocks can be assumed to be completed by your own compliance officer, and therefore are **trusted**. The `documents` block originates from the counterparty and is **untrusted**. 
+We note the following three points about the request:
+* The `item` and `transaction` blocks can be assumed to be completed by your own compliance officer, and therefore are trusted. The `documents` block originates from the counterparty and is untrusted. 
 * `specifications` is free-form, all keys and units are allowed, and there is no guarantee a given parameter is present. 
+* Next to the blocks, the request may carry an optional top-level `model` field with the chat model that answers this request, for example `"model": "RCP-AIaaS/swiss-ai/Apertus-large"`. If it is not available, return `400` with `{ "error": "model not available" }`. See [Choosing the model per request]({% link infrastructure.md %}#choosing-the-model-per-request).
 
 
 ### Response
@@ -102,8 +103,8 @@ For a transaction, the `verdict` is one of the following four values:
 ## Running in a container
 
 {: .note }
-> Before deploying, make the two changes listed on the [Infrastructure]({% link infrastructure.md %}#deploying-with-caddy) page.
-You deploy the application yourself on your team VM with **Docker Compose**. The [template repository](https://github.com/Reliable-Information-Lab-HEVS/hackathon-track2-template) ships a `compose.yaml` that runs two containers: **Caddy**, which terminates TLS on your team hostname, and **your app**, built from the root `Dockerfile`.
+> Before deploying, make the two changes to the template listed on the [Infrastructure]({% link infrastructure.md %}#deploying-with-caddy) page.
+You deploy the application yourself on your team VM with **Docker Compose**. The [template repository](https://github.com/Reliable-Information-Lab-HEVS/hackathon-track2-template) ships a `compose.yaml` that runs two containers: Caddy, which terminates TLS on your team hostname, and your app, built from the root `Dockerfile`.
 
 Your application must listen on **`0.0.0.0:8080` inside the container**. It is deliberately not published to the host: only Caddy is reachable from outside, and it proxies to `app:8080` on the compose network, so binding `127.0.0.1` makes you unreachable.
 
@@ -118,7 +119,7 @@ The corpus keeps the structure of the zip you downloaded from the Google Drive l
 
 **The data lives in `./corpus` on your VM and is mounted read-only at the same path, `/corpus`, inside the container.** Unzip it into `./corpus`, next to `compose.yaml`, and read it from `/corpus` in your code. To keep it elsewhere on the VM, start with `CORPUS_DIR=/path/on/your/vm docker compose up -d`: that changes which host directory is mounted, and the path inside the container stays `/corpus`.
 
-The inference endpoint is OpenAI-compatible and is passed by compose through `env_file: inference.env`; read `OPENAI_BASE_URL`, `OPENAI_API_KEY` and `MODEL` from the environment, do not hard-code them. An `inference.env.example` is in the template.
+The inference endpoint is OpenAI-compatible and is passed by compose through `env_file: inference.env`; read `OPENAI_BASE_URL`, `OPENAI_API_KEY` and `MODEL` from the environment, do not hard-code them. `MODEL` is your default chat model, used when a request has no `model` field. An `inference.env.example` is in the template.
 
 ---
 

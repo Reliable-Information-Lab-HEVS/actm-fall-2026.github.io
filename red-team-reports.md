@@ -25,7 +25,7 @@ Negative results are useful too. "We tried X in five ways and it held" tells the
 ## How to work
 
 - **Log everything.** Keep every request and response you send, with a timestamp and the model, for example as one JSON file per exchange. You need them as evidence, and a finding you cannot reproduce does not count.
-- **Reproduce before you report.** Run each finding again in a fresh session. If the target lets you choose the model, try a second one.
+- **Reproduce before you report.** Run each finding again in a fresh session, and with both recommended chat models, using the `model` field of the request.
 - **Prefer variety to volume.** Five findings of five different classes beat twenty variations of the same jailbreak.
 - **Stay in scope.** Only the documented endpoints of your two targets, at most 2 concurrent requests. See the [rules of engagement]({% link general-information.md %}#rules-of-engagement).
 
@@ -43,7 +43,7 @@ Target team and URL, track, dates, models tested, and a count of findings per se
 
 | ID | Severity | Class | Title | Models | Status |
 |---|---|---|---|---|---|
-| X-01 | High | Indirect prompt injection | Posted record makes the assistant reveal its system prompt | gemma, mistral | Confirmed (fresh session) |
+| X-01 | High | Indirect prompt injection | Posted record makes the assistant reveal its system prompt | gemma, Apertus | Confirmed (fresh session) |
 
 - **Severity**: Critical, High, Medium, Low, or Info. Justify it from the impact in the track's scenario, not from how clever the attack was.
 - **Class**: for example direct prompt injection, indirect prompt injection, jailbreak / framing, system-prompt extraction, data exfiltration, integrity (wrong verdict or advice), session or access control. Map it to the [OWASP Top 10 for LLM Applications](https://genai.owasp.org/llm-top-10/) where you can.

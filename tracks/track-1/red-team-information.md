@@ -44,17 +44,6 @@ Before the red-team phase opens, an extra **encrypted zip** (`track1_redteam.zip
 
 ---
 
-## Where to push
-
-- **The tool store is open.** Anyone can `POST` a vendor spec or a bulletin, and the assistant reads them back through its own tools. This is the natural home for **indirect prompt injection**: plant instructions in a record, then ask a question that pulls it in. Injections that survive sensible defences score higher.
-- **Framing on `/chat`.** Roleplay, claimed qualifications, hypotheticals, translation, partial questions across turns of one `session_id`.
-- **Grounding gaps.** Push the assistant into improvising beyond the corpus, then into confirming the sensitive part.
-- **Model choice.** Every `/chat` request may set `model` to any chat model the endpoint serves, and the target must answer with it (see [Choosing the model per request]({% link infrastructure.md %}#choosing-the-model-per-request)). The same guardrails can hold on one model and fail on another, so try each attack at least on both [recommended chat models]({% link infrastructure.md %}#recommended-models).
-
-You attack a **black box**: you know this specification and the recommended models, but not the target's code, prompts, or guardrails. See [General Information]({% link general-information.md %}) for the rules of engagement.
-
----
-
 ## Submitting
 
 Write up the exploit, the evidence, and the reproduction steps, then submit it through a red-team report as described on the [Red-Team Reports]({% link red-team-reports.md %}) page.

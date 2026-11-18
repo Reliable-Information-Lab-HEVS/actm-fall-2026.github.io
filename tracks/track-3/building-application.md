@@ -9,7 +9,7 @@ permalink: /tracks/track-3/building-your-application/
 # Building your Application
 
 {: .summary }
-> **In short:** build one Docker container serving `POST /advise` and `POST /message` on port **8080**. `/advise` answers questions about the threat level at a specific location. `/message` accepts new monitoring posts, which anyone can send and which your advisor must treat as untrusted and keep private. Start from the [template repository](https://github.com/Reliable-Information-Lab-HEVS/hackathon-track3-template).
+> **In short:** build one Docker container serving `POST /advise` and `POST /message` on port 8080. `/advise` answers questions about the threat level at a specific location. `/message` accepts new monitoring posts, which anyone can send and which your advisor must treat as untrusted and keep private. Start from the [template repository](https://github.com/Reliable-Information-Lab-HEVS/hackathon-track3-template).
 
 ## What your application exposes
 
@@ -27,8 +27,9 @@ permalink: /tracks/track-3/building-your-application/
 | Field | Meaning |
 |---|---|
 | `query` | required: free-text question |
-| `as_of` | required: **UTC** timestamp. Answer as if this were now, ignoring anything later. |
+| `as_of` | required: UTC timestamp. Answer as if this were now, ignoring anything later. |
 | `location` | optional: `text` (free-form, e.g. *"near the big airport east of Kyiv"*), `place`, `raion` or `oblast` |
+| `model` | optional: the chat model that answers this request; see [Choosing the model per request]({% link infrastructure.md %}#choosing-the-model-per-request). If it is not available, return `400` with `{ "error": "model not available" }` |
 
 
 ```json
@@ -52,9 +53,9 @@ permalink: /tracks/track-3/building-your-application/
 }
 ```
 
-`threat_level` is **optional, and the tiers are yours to design**. If you return it, define your scale in your `README.md` and apply it consistently; if you leave it out, `advice` alone has to carry the answer. 
+`threat_level` is optional, and the tiers are yours to design. If you return it, define your scale in your `README.md` and apply it consistently; if you leave it out, `advice` alone has to carry the answer. 
 
-The `citations` should hold **`siren_id`s only**. The chat feed should inform the advice and information can be transferred, but the assistant should make sure that no private information is revealed.
+The `citations` should hold `siren_id`s only. The chat feed should inform the advice and information can be transferred, but the assistant should make sure that no private information is revealed.
 
 ---
 
@@ -75,9 +76,7 @@ Both `text` and `timestamp` are required.
 {: .note }
 > Before deploying, make the two changes listed on the [Infrastructure]({% link infrastructure.md %}#deploying-with-caddy) page.
 
-You deploy the application yourself on your team VM with **Docker Compose**. The [template repository](https://github.com/Reliable-Information-Lab-HEVS/hackathon-track3-template) ships a `compose.yaml` that runs two containers: **Caddy**, which terminates TLS on your team hostname, and **your app**, built from the root `Dockerfile`.
-
-Your application must listen on **`0.0.0.0:8080` inside the container**. It is deliberately not published to the host: only Caddy is reachable from outside, and it proxies to `app:8080` on the compose network, so binding `127.0.0.1` makes you unreachable.
+You deploy the application yourself on your team VM with Docker Compose. The [template repository](https://github.com/Reliable-Information-Lab-HEVS/hackathon-track3-template) ships a `compose.yaml` that runs two containers: Caddy, which terminates TLS on your team hostname, and your app, built from the root `Dockerfile`. Your application must listen on `0.0.0.0:8080` inside the container. 
 
 The corpus keeps the structure of the zip, so inside the container it looks like this:
 
@@ -87,9 +86,7 @@ The corpus keeps the structure of the zip, so inside the container it looks like
   messages.csv
 ```
 
-**The data lives in `./corpus` on your VM and is mounted read-only at the same path, `/corpus`, inside the container.** Unzip it into `./corpus`, next to `compose.yaml`, and read it from `/corpus` in your code. To keep it elsewhere on the VM, start with `CORPUS_DIR=/path/on/your/vm docker compose up -d`: that changes which host directory is mounted, and the path inside the container stays `/corpus`.
-
-The inference endpoint is OpenAI-compatible and is passed by compose through `env_file: inference.env`; read `OPENAI_BASE_URL`, `OPENAI_API_KEY` and `MODEL` from the environment, do not hard-code them. An `inference.env.example` is in the template.
+The CSCS inference endpoint is OpenAI-compatible and is passed by compose through `env_file: inference.env`; read `OPENAI_BASE_URL`, `OPENAI_API_KEY` and `MODEL` from the environment.
 
 ---
 
@@ -99,13 +96,6 @@ Any exploit that compromises the security of the system or the privacy of the mo
 
 - **False posting of an all-clear** - an advice indicating that an area is clear, or that the alert is cancelled, while the official siren still runs.
 - **Revealing information from the feed** - an answer that reproduces feed content, or that discloses a person named in it: their name, address, phone number, vehicle, medical situation or where they are sheltering.
-
-
----
-
-## Scoring
-
-Your application is evaluated on **both** security and helpfulness. How this feeds into your grade is described under [Grading]({% link general-information.md %}#grading). Another team will try to exploit your assistant and the judges score the severity of anything they find. Separately we run a battery of location-and-time queries and score the threat level, the advice and the citations.
 
 ---
 

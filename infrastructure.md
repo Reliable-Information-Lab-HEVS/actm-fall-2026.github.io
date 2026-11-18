@@ -8,7 +8,7 @@ permalink: /infrastructure/
 # Infrastructure
 
 {: .summary }
-> **In short:** each team gets an Ubuntu VM with Docker on the HSLU network. You deploy your application on it yourself, behind Caddy on port 443, at `https://actm-teamN.{{ site.domain }}`. All teams use the same OpenAI-compatible inference endpoint, with one API key per team.
+> **In short:** each team gets an Ubuntu VM with Docker on the HSLU network. You deploy your application on it yourself, behind Caddy on port 443, at `https://actm-teamN.{{ site.domain }}`. All teams use the [CSCS Inference](https://serving.swissai.svc.cscs.ch/), which can be accessed through the HSLU network. 
 
 ---
 
@@ -20,18 +20,18 @@ permalink: /infrastructure/
 | **Resources** | 4 vCPUs, 7.3 GB RAM, 18 GB disk (about 11 GB free) |
 | **Software** | Docker and Docker Compose |
 | **Hostname** | `actm-teamN.{{ site.domain }}`, with `N` your team number |
-| **Login** | `ssh labadmin@actm-teamN.{{ site.domain }}`, with SSH keys only |
+| **Login** | `ssh student@actm-teamN.{{ site.domain }}`, with SSH keys only |
 
 {: .important }
 > The VMs are reachable **only from the HSLU network**: HSLU Wi-Fi on campus, or the HSLU VPN from elsewhere. If a hostname does not resolve, check that you are connected to one of the two.
 
 ### SSH access
 
-Password login over SSH is disabled. Send the teaching team the **public** key of each team member (the `.pub` file) before the kickoff; we add it to your VM. If you do not have a key yet:
+Password login over SSH is disabled. Send Alexander Sternfeld the **public** key of each team member (the `.pub` file); he will add it to your VM. If you do not have a key yet:
 
 ```bash
 ssh-keygen -t ed25519 -C "your-name-actm"
-# send us the content of ~/.ssh/id_ed25519.pub, never the file without .pub
+# send us the content of ~/.ssh/id_ed25519.pub, never the (private key) file without .pub
 ```
 
 To make logging in easier, add this to `~/.ssh/config` on your laptop:
@@ -39,13 +39,13 @@ To make logging in easier, add this to `~/.ssh/config` on your laptop:
 ```
 Host actm
     HostName actm-teamN.{{ site.domain }}
-    User labadmin
+    User student
     IdentityFile ~/.ssh/id_ed25519
 ```
 
-Then `ssh actm` is enough.
+Then `ssh actm` is enough. 
 
-The `labadmin` user has `sudo` rights; the password is handed to your team at the kickoff. **The VM is yours to break, but if you break it, you rebuild it**: keep everything you need in your Git repository.
+You have `sudo` rights on the VM, use it responsibly and please do not change the network configuration, this will cause your VM to become unreachable. 
 
 ### Network
 
@@ -53,31 +53,17 @@ The `labadmin` user has `sudo` rights; the password is handed to your team at th
 |---|---|---|
 | 22 | HSLU network | SSH |
 | 443 | HSLU network and the other VMs | **your application**, through Caddy |
-| 8080 | HSLU network and the other VMs | for testing only; your submitted endpoint is on 443 |
-
-All other inbound ports, including 80, are closed. Outbound HTTPS works (PyPI, Docker Hub, GitHub, Hugging Face, the inference endpoint).
-
-{: .warning }
-> HSLU's network protection automatically throttles excessive traffic. Keep your own load tests small, and respect the rate limits in the [rules of engagement]({% link general-information.md %}#rules-of-engagement) during the red phase.
 
 ---
 
 ## Deploying with Caddy
 
-Your VM already has a TLS certificate for its own hostname, `actm-teamN.{{ site.domain }}`, under `/etc/tls/actm/` (`fullchain.pem` and `privkey.pem`). The track templates ship a `compose.yaml` with two containers: **Caddy**, which terminates TLS on port 443 using that certificate, and **your app**, which Caddy reaches as `app:8080` on the internal Docker network.
+Your VM already has a TLS certificate for its own hostname, `actm-teamN.{{ site.domain }}`, under `/etc/tls/actm/` (`fullchain.pem` and `privkey.pem`). The track templates ship a `compose.yaml` with two containers: Caddy, which terminates TLS on port 443 using that certificate, and your app, which Caddy reaches as `app:8080` on the internal Docker network.
 
-Before the first start, make two changes:
+Before the first start, make two changes in the template:
 
 1. In the `Caddyfile`, replace `N` in `actm-teamN.{{ site.domain }}` with your team number.
-2. Copy `inference.env.example` to `inference.env` and fill in your API key and your model. The endpoint `{{ site.inference_base_url }}` is already set.
-
-Then:
-
-```bash
-docker compose up -d --build
-docker compose ps            # both containers up, app healthy
-curl https://actm-teamN.{{ site.domain }}/health
-```
+2. Copy `inference.env.example` to `inference.env` and fill in your API key and your default chat model. The endpoint `{{ site.inference_base_url }}` is already set.
 
 {: .warning }
 > Do not delete or replace the certificate under `/etc/tls/actm/`. It is provisioned for you, and it cannot be re-issued from the VM.
@@ -91,26 +77,20 @@ All teams use the same OpenAI-compatible endpoint, the [Swiss AI Serving](https:
 | | |
 |---|---|
 | **Endpoint** | `{{ site.inference_base_url }}` |
-| **API key** | one per team, handed out at the kickoff |
+| **API key** | you can register one with your HSLU account on [serving.swissai.svc.cscs.ch](https://serving.swissai.svc.cscs.ch/) |
 | **Rate limit** | about 15 requests per minute per key for the models below |
 
-{: .warning }
-> The rate limit applies to every call your application makes, including embeddings, reranking and any extra LLM calls in your guardrails. Design your pipeline so that one user question does not burn through the whole minute's budget.
-
-Read `OPENAI_BASE_URL`, `OPENAI_API_KEY` and `MODEL` from the environment. Do not hard-code them, and never commit the key: `inference.env` is in the template's `.gitignore`. Because the endpoint is OpenAI-compatible, the `openai` Python SDK picks up the first two by itself.
+Read `OPENAI_BASE_URL`, `OPENAI_API_KEY` and `MODEL` from the environment. Do not hard-code them, and never commit the key: `inference.env` is in the template's `.gitignore`. 
 
 ### Recommended models
-
-Use the **exact** ids below, including the prefix before the first `/`. Without it the endpoint returns an error.
+As default models for your application, we recommend the following. 
 
 **Chat models**, called on `/chat/completions`:
 
 | Model id | Notes |
 |---|---|
 | `CSCS-Inference/google/gemma-4-31B-it` | fast, good default |
-| `RCP-AIaaS/swiss-ai/Apertus-large` | the Swiss open LLM |
-
-For grounded, extractive answers you will usually want a `temperature` well below the default. If your design relies on tool calling (`tools` in the request), check early that the model you pick handles it reliably.
+| `RCP-AIaaS/swiss-ai/Apertus-large` | Apertus, but might struggle with tool calling |
 
 **Embedding model**, called on `/embeddings`:
 
@@ -120,35 +100,18 @@ For grounded, extractive answers you will usually want a `temperature` well belo
 
 **Reranker** (optional): `RCP-AIaaS/Qwen/Qwen3-Reranker-8B`. See the reranking section of [RAG]({% link rag.md %}) for when a reranker helps.
 
-You can also run a small embedding or reranking model locally on your VM, for example with `sentence-transformers`; with 4 CPUs and no GPU, keep it small.
+You may try any other model the endpoint serves. You can browse them on [serving.swissai.svc.cscs.ch](https://serving.swissai.svc.cscs.ch/). 
 
-### Other models
+### Choosing the model per request
 
-You may try any other model the endpoint serves. List them with:
+Every request to your application's main endpoint (`/chat` in Track 1, `/advise` in Tracks 2 and 3) may carry an optional top-level `model` field with a chat model id:
 
-```bash
-curl -H "Authorization: Bearer $OPENAI_API_KEY" {{ site.inference_base_url }}/models
+```json
+{ "model": "RCP-AIaaS/swiss-ai/Apertus-large", "...": "the rest of the request" }
 ```
 
-or browse them on [serving.swissai.svc.cscs.ch](https://serving.swissai.svc.cscs.ch/). If you deploy something other than the recommended models, say which model and why in your threat model. Some models are reasoning models whose responses carry a `reasoning_content` field next to `content`: read the answer from `content`, and do not show the reasoning to a user or feed it back as context without thinking about what is in it.
-
-### A first request
-
-```python
-from openai import OpenAI
-import os
-
-client = OpenAI()  # reads OPENAI_BASE_URL and OPENAI_API_KEY
-reply = client.chat.completions.create(
-    model=os.environ["MODEL"],
-    messages=[{"role": "user", "content": "Say hello in five words."}],
-    temperature=0.2,
-)
-print(reply.choices[0].message.content)
-```
+- If `model` is present and available on CSCS, the answer to that request must be generated by that model.
+- If `model` is absent, use your default, the `MODEL` variable from `inference.env`.
+- If `model` names a model that is not available on the endpoint, do not fall back to another model. Return HTTP `400` with `{ "error": "model not available" }`.
 
 ---
-
-## Using AI coding tools
-
-You can use any of the models on the endpoint for coding assistance, or your own subscriptions. For the hosted models, an existing framework such as [OpenCode](https://opencode.ai/) works well. See [Using AI tools]({% link general-information.md %}#using-ai-tools) for the course rules.

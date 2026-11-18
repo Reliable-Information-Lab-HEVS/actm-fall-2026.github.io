@@ -15,20 +15,20 @@ permalink: /tracks/track-3/data/
 
 ## 1. The siren record
 
-`sirens.csv`, **4241 records, 21 August to 3 September 2026**, from Ukraine's official air-raid declarations.
+`sirens.csv`, 4241 records, 21 August to 3 September 2026, from Ukraine's official air-raid declarations.
 
 | Column | Meaning |
 |---|---|
-| `siren_id` | stable identifier, `S-00001`. **Cite this.** |
+| `siren_id` | stable identifier, `S-00001`. Cite this. |
 | `oblast`, `raion`, `hromada` | the area the alert covers |
 | `level` | `raion` (4004), `hromada` (190) or `oblast` (47) |
 | `started_at`, `finished_at` | UTC, both always present in this extract |
 
-Since December 2025 Ukraine declares alerts by **district** rather than by region, so most records name a raion. 
+Since December 2025 Ukraine declares alerts by district rather than by region, so most records name a raion. 
 
 ## 2. The chat feed
 
-`messages.csv`, **1793 messages, 22 August to 2 September 2026**, from two monitoring groups.
+`messages.csv`, 1793 messages, 22 August to 2 September 2026, from two monitoring groups.
 
 | Column | Meaning |
 |---|---|
@@ -39,16 +39,16 @@ Since December 2025 Ukraine declares alerts by **district** rather than by regio
 The challenge here is to extract meaningful information from unprocessed Ukranian text. 
 
 {: .warning }
-> **The chat feed is private.** Among the drone reports the channel carries ordinary local traffic: evacuation requests, someone checking on a neighbour, a coordination note. Those messages name people and give addresses, phone numbers, medical details, vehicles and shelter locations. The advisor should answer *from* the feed, but nothing that identifies a person may appear in a response.
+> The chat feed is private. Among the drone reports the channel carries ordinary local traffic: evacuation requests, someone checking on a neighbour, a coordination note. Those messages name people and give addresses, phone numbers, medical details, vehicles and shelter locations. The advisor should answer *from* the feed, but nothing that identifies a person may appear in a response.
 
 {: .note }
-> **The siren record is authoritative.** If an alert is still present in the siren record, the advisor must not clear the area. If the chat feed indicates that the threat has passed, the advisor may mention that, but must also note that the siren record still indicates an alert. 
+> The siren record is authoritative: if an alert is still present in the siren record, the advisor must not clear the area. If the chat feed indicates that the threat has passed, the advisor may mention that, but must also note that the siren record still indicates an alert. 
 
 ---
 
 ## How to obtain the data
 
-Distributed as an **encrypted zip** in this [data folder]({{ site.data_url }}).
+Distributed as an encrypted zip in this [data folder]({{ site.data_url }}).
 
 ```
 track3_data/
@@ -57,7 +57,7 @@ track3_data/
 ```
 
 {: .note }
-> Your zip password is handed to your team at the **kickoff (Fri 27.11)**.
+> Your zip password is handed to your team at the kickoff (Fri 27.11).
 
 ---
 Next: [Building your Application]({% link tracks/track-3/building-application.md %}) →

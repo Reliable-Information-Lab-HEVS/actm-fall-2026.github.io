@@ -13,10 +13,10 @@ baseurl: /actm-fall-2026.github.io
 # ---------------------------------------------------------------------------
 domain: "reliable-information-lab.ch"      # team N is served at https://actm-teamN.<domain>
 inference_base_url: "https://api.swissai.svc.cscs.ch/v1"
-data_url: "#data-link-tbc"                 # where the encrypted track zips are shared
-handin_url: "#handin-link-tbc"             # application hand-in (repo URL + v1 commit)
-redteam_upload_url: "#redteam-upload-tbc"  # red-team report upload (e.g. Ilias)
-report_deadline: "TBC"                     # final report due date
+data_url: "https://drive.google.com/drive/folders/1qwtx3TB7G3nh-Nu63feYynhjkJ6mIcTS?usp=sharing"                 # where the encrypted track zips are shared
+threat_model_url: "https://forms.gle/u5XXMMLJnM7BZu5Y8"
+handin_url: "https://forms.gle/TBXkaHgY6cFTM5sc9"             # application hand-in (repo URL + v1 commit)
+redteam_upload_url: "https://forms.gle/j7mjTBT1HAzfkkTL9"  # red-team report upload (e.g. Ilias)
 
 # Callout boxes. Usage in a page:
 #   {: .warning }

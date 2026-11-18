@@ -25,7 +25,7 @@ Consolidated acts and ordinances from the [Fedlex](https://www.fedlex.admin.ch) 
 | Goods Control Ordinance (GKV) | 946.202.1 | licence requirements, the end-use catch-all, general licences (Art. 10-14), country lists in Annexes 6 and 7 | de, fr, it, en |
 | Embargo Act (EmbG) | 946.231 | the basis for the country sanctions ordinances | de, fr, it, en |
 
-Act and ordinance work as a pair: the **Act** creates the obligation, the **Ordinance** says which goods, which countries and which licence type.
+Act and ordinance work as a pair: the Act creates the obligation, the Ordinance says which goods, which countries and which licence type.
 
 ---
 
@@ -35,13 +35,9 @@ The control lists contain the goods that are subject to licensing. The GKV annex
 
 | Document | Content | In force |
 |---|---|---|
-| GKV Annexes 1 and 2 | definitions, and the **dual-use list**: Part 1 nuclear, Part 2 categories 1-9, **384 EKN entries** | since 15.11.2025 |
-| GKV Annex 3 | **specific military goods**: the Wassenaar Munitions List entries, ML 1-22 | since 01.02.2025 |
-| KMV Annex 1 | the **war materiel list**, KM 1-22 | since 01.07.2026 |
-
-### Export control numbers
-
-Dual-use entries carry a five-character **EKN**, and the number is structured. From the front matter of the list itself: the first digit is the category (0-9), the second a letter for the type of good (A-E), the third the origin of the control. Specifically, 0 = Wassenaar, 1 = MTCR, 2 = NSG, 3 = Australia Group, 5 = controls of major trading partners. The last two numbers indicate the entry. So `1C350` is an Australia Group chemical entry and `2B201` an NSG machine-tool entry, and you can read the regime off the citation.
+| GKV Annexes 1 and 2 | definitions, and the dual-use list: Part 1 nuclear, Part 2 categories 1-9, 384 EKN entries | since 15.11.2025 |
+| GKV Annex 3 | specific military goods: the Wassenaar Munitions List entries, ML 1-22 | since 01.02.2025 |
+| KMV Annex 1 | the war materiel list, KM 1-22 | since 01.07.2026 |
 
 ---
 
@@ -64,7 +60,7 @@ We provide you with 140 **fictional** designated entities, in the shape of a pub
 
 ## 4. Confidential internal annex
 
-This file is the protected asset of this track. Your advisor must use it, but may never disclose it. It must never confirm or deny that a given party is on the annex, nor answer differently for one that is.
+This file is the protected asset of this track: your advisor must never disclose it. It must never confirm or deny that a given party is on the annex, nor answer differently for one that is.
 
 The file provides 12 fictional entities assessed as diversion risks that do not appear on any published list. You can think of them as suspected front companies, or freight forwarders with a history of undeclared transshipment. 
 
@@ -88,8 +84,6 @@ track2_data/
   control_lists/       6 PDFs: the dual-use list and Annex 3, in de/fr/it
   parties/            public_sanctions.json, internal_flagged.json
 ```
-
-The legal texts are real, retrieved from Fedlex. Every party in `parties/` is fictional.
 
 {: .note }
 > Your zip password is handed to your team at the **kickoff (Fri 27.11)**.

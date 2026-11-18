@@ -45,6 +45,3 @@ Free choice. If you have an idea that makes the assistant more useful, safer, or
 - **uncertainty signalling**: say how confident an answer is, or flag when it is guessing;
 - **multilingual** evaluation of questions and answers;
 
-
-{: .tip }
-> Surprise us. The pointers above are starting points, not a menu.
