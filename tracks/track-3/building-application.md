@@ -73,20 +73,7 @@ Both `text` and `timestamp` are required.
 
 ## Running in a container
 
-{: .note }
-> Before deploying, make the two changes listed on the [Infrastructure]({% link infrastructure.md %}#deploying-with-caddy) page.
-
-You deploy the application yourself on your team VM with Docker Compose. The [template repository](https://github.com/Reliable-Information-Lab-HEVS/hackathon-track3-template) ships a `compose.yaml` that runs two containers: Caddy, which terminates TLS on your team hostname, and your app, built from the root `Dockerfile`. Your application must listen on `0.0.0.0:8080` inside the container. 
-
-The corpus keeps the structure of the zip, so inside the container it looks like this:
-
-```
-/corpus/
-  sirens.csv
-  messages.csv
-```
-
-The CSCS inference endpoint is OpenAI-compatible and is passed by compose through `env_file: inference.env`; read `OPENAI_BASE_URL`, `OPENAI_API_KEY` and `MODEL` from the environment.
+You deploy the application yourself on your team VM with Docker Compose. The [template repository](https://github.com/Reliable-Information-Lab-HEVS/hackathon-track3-template) ships a `compose.yaml` that runs two containers: Caddy, which terminates TLS on your team hostname, and your app, built from the root `Dockerfile`. Your application must listen on `0.0.0.0:8080` inside the container. The template is minimal, and you are fully free to adapt it in any way you like.
 
 ---
 

@@ -40,7 +40,7 @@ Exact request and response shapes are in [Building your Application]({% link tra
 Before the red-team phase opens, an extra **encrypted zip** (`track1_redteam.zip`) becomes available in the [data folder]({{ site.data_url }}). It is the attacker's half of the corpus described in [Data]({% link tracks/track-1/data.md %}): the sensitive content is seeded into the manual prose, and the pack tells you exactly what was seeded.
 
 {: .note }
-> The password for this zip is shared with the red team **at the start of the red phase (Fri 11.12)**, not at the kickoff with the build data.
+> The password for this zip is shared with the red team at the start of the red phase (Fri 11.12), not at the kickoff with the build data.
 
 ---
 

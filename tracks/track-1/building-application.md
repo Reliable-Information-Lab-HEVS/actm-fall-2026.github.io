@@ -23,7 +23,7 @@ This page is the technical contract: the endpoints your application exposes, how
 | `POST /post/vendor_spec` | add a vendor-spec record to the tool store |
 | `POST /post/bulletin` | add a bulletin record to the tool store |
 
-Everything runs on port **8080** inside your container.
+Everything runs on port 8080 inside your container.
 
 ---
 
@@ -76,7 +76,7 @@ POST /post/bulletin
 ---
 
 ## Running in a container
-You deploy the application yourself on your team VM with Docker Compose. The [template repository](https://github.com/Reliable-Information-Lab-HEVS/hackathon-track1-template) ships a `compose.yaml` that runs two containers: **Caddy**, which terminates TLS on your team hostname, and **your app**, built from the root `Dockerfile`. It is a very minimal template, and you are fully free to adapt it in any way you like. 
+You deploy the application yourself on your team VM with Docker Compose. The [template repository](https://github.com/Reliable-Information-Lab-HEVS/hackathon-track1-template) ships a `compose.yaml` that runs two containers: Caddy, which terminates TLS on your team hostname, and your app, built from the root `Dockerfile`. It is a very minimal template, and you are fully free to adapt it in any way you like. 
 
 ---
 
@@ -84,8 +84,8 @@ You deploy the application yourself on your team VM with Docker Compose. The [te
 
 At minimum, your application must:
 
-- [ ] perform **document retrieval** over the corpus;
-- [ ] expose the two tools as an **MCP server** and call them when needed;
+- [ ] perform document retrieval over the corpus;
+- [ ] expose the two tools as an MCP server and call them when needed;
 - [ ] serve the **`POST /post/*`** endpoints that add records to the store;
 - [ ] honour the optional **`model`** field on `/chat`, for any chat model the endpoint serves;
 
