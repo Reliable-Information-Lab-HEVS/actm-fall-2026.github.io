@@ -28,6 +28,7 @@ There are three tracks, each with its own scenario and data. Two teams work on e
 | [Track 1: Documentation Assistant]({% link tracks/track-1/index.md %}) | Conversational assistant over dense firearms maintenance manuals, with two lookup tools backed by an open data store |
 | [Track 2: Export Control Advisor]({% link tracks/track-2/index.md %}) | Compliance advisor over Swiss arms and dual-use export law |
 | [Track 3: Air Threat Advisor]({% link tracks/track-3/index.md %}) | Advisor over Ukraine's official siren record and a private monitoring feed |
+
 ---
 
 ## Timeline
