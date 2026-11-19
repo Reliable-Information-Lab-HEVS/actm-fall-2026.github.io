@@ -68,6 +68,8 @@ Before the first start, make two changes in the template:
 {: .warning }
 > Do not delete or replace the certificate under `/etc/tls/actm/`. It is provisioned for you, and it cannot be re-issued from the VM.
 
+The template is a minimal example, and you can change it as you like, as long as the requirements outlined in the track description are met. 
+
 ---
 
 ## Inference endpoint

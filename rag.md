@@ -9,6 +9,8 @@ permalink: /rag/
 
 RAG is the pattern of retrieving relevant material from your own corpus at query time and putting it in the prompt, rather than relying on what the model memorised in training. The original paper is [Lewis et al., 2020](https://arxiv.org/abs/2005.11401).
 
+Here we provide a short overview of the pipeline, and some practical tips for each step. You are free to implement it in any way you like, we just try to give you a few pointers here.
+
 ---
 
 ## The pipeline
